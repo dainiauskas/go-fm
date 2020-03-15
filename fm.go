@@ -49,3 +49,13 @@ func (fm *FileManager) DeleteByRegex(rg string) int {
 
 	return files.DeleteAll(fm.path)
 }
+
+// DeleteAllFiles existing in Files list
+func (fm *FileManager) DeleteAllFiles(files *Files) int {
+	return files.DeleteAll(fm.path)
+}
+
+// GetPath return path from FileManager
+func (fm *FileManager) GetPath() string {
+	return fm.path
+}

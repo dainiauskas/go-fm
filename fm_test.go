@@ -61,4 +61,13 @@ func TestFindByRegex(t *testing.T) {
 	if deleted != to {
 		t.Errorf("Wanted deleted files: %d, got %d", to, deleted)
 	}
+
+	deleted = fm.DeleteAllFiles(files)
+	if deleted != 0 {
+		t.Errorf("Wanted zero, go %d", deleted)
+	}
+
+	if fm.GetPath() != dir {
+		t.Errorf("Wrong FileManager path, wanted: %s, got: %s", dir, fm.GetPath())
+	}
 }
