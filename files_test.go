@@ -11,12 +11,18 @@ func TestFiles(t *testing.T) {
 		t.Errorf("Wanted 0, got %d", f.Count())
 	}
 
+	f.Append("tst_v2.tst")
+	f.Append("tst_v1.tst")
+	f.Append("tst_v2.0.tst")
+	f.Append("tst_v1.0.tst")
+	f.Append("tst_v1.0.0.tst")
 	f.Append("tst_v1.0.0.tst")
 	f.Append("tst_v2.2.19.tst")
 	f.Append("tst_v2.2.20.tst")
 	f.Append("tst_v2.1.19.tst")
 	f.Append("tst_v2.0.0.tst")
-	f.Append("tst_v1.0.19.tst")
+	f.Append("tst_v1.0.19.0.tst")
+	f.Append("without_numbers.tst")
 
 	name := f.FindLastVersion(`\d+`)
 	if name != "tst_v2.2.20.tst" {

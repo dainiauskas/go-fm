@@ -57,26 +57,52 @@ func (f *Files) DeleteAll(path string) (deleted int) {
 	return
 }
 
+// FindLastVersion search and return file name with last version
 func (f *Files) FindLastVersion(r string) string {
 	rg := regexp.MustCompile(r)
 
-	var maxMajor, maxMinor, maxPatch int
+	var maxMajor, maxMinor, maxPatch, maxBuild int
+	var major, minor, patch, build int
 	var name string
 
 	for _, file := range f.list {
 		vs := rg.FindAllString(file, -1)
 
-		major, _ := strconv.Atoi(vs[0])
-		minor, _ := strconv.Atoi(vs[1])
-		patch, _ := strconv.Atoi(vs[2])
-
-		if maxMajor > major || maxMinor > minor || maxPatch > patch {
+		switch len(vs) {
+		case 1:
+			major, _ = strconv.Atoi(vs[0])
+			if maxMajor > major {
+				continue
+			}
+		case 2:
+			major, _ = strconv.Atoi(vs[0])
+			minor, _ = strconv.Atoi(vs[1])
+			if maxMajor > major || maxMinor > minor {
+				continue
+			}
+		case 3:
+			major, _ = strconv.Atoi(vs[0])
+			minor, _ = strconv.Atoi(vs[1])
+			patch, _ = strconv.Atoi(vs[2])
+			if maxMajor > major || maxMinor > minor || maxPatch > patch {
+				continue
+			}
+		case 4:
+			major, _ = strconv.Atoi(vs[0])
+			minor, _ = strconv.Atoi(vs[1])
+			patch, _ = strconv.Atoi(vs[2])
+			build, _ = strconv.Atoi(vs[3])
+			if maxMajor > major || maxMinor > minor || maxPatch > patch || maxBuild > build {
+				continue
+			}
+		default:
 			continue
 		}
 
 		maxMajor = major
 		maxMinor = minor
 		maxPatch = patch
+		maxBuild = build
 
 		name = file
 	}
