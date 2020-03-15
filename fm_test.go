@@ -48,8 +48,8 @@ func TestFindByRegex(t *testing.T) {
 	}
 
 	files := fm.FindByRegex(`^tfm_\d*.tmp`)
-	if len(files) != to {
-		t.Errorf("Wanted files %d, got %d", to, len(files))
+	if files == nil {
+		t.Errorf("Wanted files %d, got nil", to)
 	}
 
 	deleted := fm.DeleteByRegex(`^bfm_\d*.tmp`)
@@ -58,7 +58,7 @@ func TestFindByRegex(t *testing.T) {
 	}
 
 	deleted = fm.DeleteByRegex(`^tfm_\d*.tmp`)
-	if deleted != uint(to) {
+	if deleted != to {
 		t.Errorf("Wanted deleted files: %d, got %d", to, deleted)
 	}
 }
