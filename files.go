@@ -1,10 +1,12 @@
 package fm
 
 import (
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 // Files used to manipuliate with file list
@@ -44,6 +46,24 @@ func (f *Files) Remove(name string) (ok bool) {
 // Count return files count in Files list
 func (f *Files) Count() int {
 	return len(f.list)
+}
+
+// String return file list in string
+func (f *Files) String() string {
+	return strings.Join(f.list, ", ")
+}
+
+// Copy for copy files from source to destination existings in list
+func (f *Files) Copy(src, dst *FileManager) error {
+	for _, file := range f.list {
+		src := filepath.Join(src.GetPath(), file)
+		dst := filepath.Join(dst.GetPath(), file)
+		if err := f.copyFile(src, dst); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // DeleteAll delete all files in path name
@@ -108,4 +128,13 @@ func (f *Files) FindLastVersion(r string) string {
 	}
 
 	return name
+}
+
+func (f *Files) copyFile(src, dst string) error {
+	input, err := ioutil.ReadFile(src)
+	if err != nil {
+		return err
+	}
+
+	return ioutil.WriteFile(dst, input, 0644)
 }
